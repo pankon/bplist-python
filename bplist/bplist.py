@@ -91,7 +91,7 @@ class BPListReader(object):
         
         Unpacks int field from plist at given offset and returns its size and value
         '''
-        obj_header = struct.unpack('!B', self.data[offset])[0]
+        obj_header = self.data[offset]
         obj_type, obj_info = (obj_header & 0xF0), (obj_header & 0x0F)
         int_sz = 2**obj_info
         return int_sz, self.__unpackIntStruct(int_sz, self.data[offset+1:offset+1+int_sz])
@@ -127,7 +127,7 @@ class BPListReader(object):
         
         Unpacks float field from plist at given offset
         '''
-        obj_header = struct.unpack('!B', self.data[offset])[0]
+        obj_header = self.data[offset]
         obj_type, obj_info = (obj_header & 0xF0), (obj_header & 0x0F)
         int_sz = 2**obj_info
         return int_sz, self.__unpackFloatStruct(int_sz, self.data[offset+1:offset+1+int_sz])
@@ -141,7 +141,7 @@ class BPListReader(object):
         
         Unpacks and returns an item from plist
         '''
-        obj_header = struct.unpack('!B', self.data[offset])[0]
+        obj_header = self.data[offset]
         obj_type, obj_info = (obj_header & 0xF0), (obj_header & 0x0F)
         if   obj_type == 0x00:
             if   obj_info == 0x00: # null   0000 0000
@@ -212,7 +212,7 @@ class BPListReader(object):
             if type(obj) == dict:
                 newDic = {}
                 for k,v in obj.iteritems():
-                    rk = self.__resolveObject(k)
+                    rk = str(self.__resolveObject(k))
                     rv = self.__resolveObject(v)
                     newDic[rk] = rv
                 self.resolved[idx] = newDic
@@ -284,4 +284,4 @@ if __name__ == "__main__":
     out = BPListReader(data).parse()
 
     with open(file_path + ".json", "w") as fp:
-        json.dump(out, indent=4, default=str)
+        json.dump(out, indent=4)
