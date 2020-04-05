@@ -223,7 +223,7 @@ class BPListReader(object):
     
     def parse(self):
         # read header
-        if self.data[:8] != 'bplist00':
+        if self.data[:8] != b'bplist00':
             raise Exception('Bad magic')
         
         # read trailer
@@ -271,3 +271,17 @@ def unplist(s):
     from Foundation import NSData, NSPropertyListSerialization
     d = NSData.dataWithBytes_length_(s, len(s))
     return NSPropertyListSerialization.propertyListWithData_options_format_error_(d, 0, None, None)
+
+if __name__ == "__main__":
+    import os
+    import sys
+    import json
+    file_path = sys.argv[1]
+
+    with open(file_path, "rb") as fp:
+        data = fp.read()
+
+    out = BPListReader(data).parse()
+
+    with open(file_path + ".json", "w") as fp:
+        json.dump(out, indent=4, default=str)
