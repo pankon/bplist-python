@@ -21,6 +21,7 @@
 #################################################################################
 
 import struct
+import codecs
 from datetime import datetime, timedelta
 
 class BPListWriter(object):
@@ -212,7 +213,7 @@ class BPListReader(object):
             if type(obj) == dict:
                 newDic = {}
                 for k,v in obj.iteritems():
-                    rk = str(self.__resolveObject(k))
+                    rk = codecs.encode(self.__resolveObject(k), "utf-8")
                     rv = self.__resolveObject(v)
                     newDic[rk] = rv
                 self.resolved[idx] = newDic
