@@ -13,5 +13,5 @@ Apple binary Property List reader/writer for Python
         
        
 ## even simpler run
-python3 bplist.py [file_path]
+python3 -m bplist [file_path]
 (auto-outputs file_path+".json")
