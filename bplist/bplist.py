@@ -213,7 +213,11 @@ class BPListReader(object):
             if type(obj) == dict:
                 newDic = {}
                 for k,v in obj.items():
-                    rk = codecs.decode(self.__resolveObject(k), "utf-8")
+                    key_resolved = self.__resolveObject(k)
+                    if isinstance(key_resolved, str):
+                        rk = key_resolved
+                    else:
+                        rk = codecs.decode(key_resolved, "utf-8")
                     rv = self.__resolveObject(v)
                     newDic[rk] = rv
                 self.resolved[idx] = newDic
